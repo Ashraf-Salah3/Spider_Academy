@@ -25,7 +25,7 @@ import { useFetchQuestions } from '@/api/qestionsApi'
 import { QuestionsFiltersProps, QuestionsPageProps } from '@/types/questionsType'
 import { useRouter } from "next/navigation";
 import Loading from "@/app/loading";
-import { QueryClient, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import instance from "@/axios";
 import { toast } from "sonner";
 

@@ -1,18 +1,21 @@
-import React from 'react'
-import ModuleSectionForm from '../ModuleSectionForm'
+import React from "react";
+import ModuleSectionForm from "../ModuleSectionForm";
+import { getModules } from "@/api/modulesApi";
 
-const AddModuleSectionPage = () => {
+const AddModuleSectionPage = async () => {
+  const modules = await getModules({ PageIndex: 1, PageSize: 30 });
+
   return (
     <div className="w-3/4 m-auto mt-6 ">
-    <div className="flex justify-center">
-      <h1 className="text-white font-semibold text-2xl mb-6 bg-[var(--accent)] px-8 py-3 rounded-2xl w-fit">
-        Add Module Section
-      </h1>
-    </div>
-    
-   <ModuleSectionForm isEdit={false} />
-  </div>
-  )
-}
+      <div className="flex justify-center">
+        <h2 className="text-center text-white w-fit  border-b-3 border-[var(--accent)] mx-auto my-4 font-bold text-2xl mb-8">
+          Add Module Section
+        </h2>
+      </div>
 
-export default AddModuleSectionPage
+      <ModuleSectionForm isEdit={false} modules={modules} />
+    </div>
+  );
+};
+
+export default AddModuleSectionPage;

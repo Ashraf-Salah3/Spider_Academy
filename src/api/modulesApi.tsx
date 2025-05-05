@@ -1,37 +1,38 @@
-"use client";
+import { ModuleFilterProps, ModulesPageProps } from "@/types/moduleType";
 
-import instance from "@/axios";
-import { ModulesPageProps } from "@/types/moduleType";
-import { useQuery } from "@tanstack/react-query";
-
-const fetchModules = async ({
-  queryKey,
-}: {
-  queryKey: [string, ModulesPageProps];
-}) => {
-  const [, moduleFilter] = queryKey;
-  const response = await instance.get("Module", { params: moduleFilter });
-  return response.data.data;
-};
-
-const fetchSingleModule = async ({
-  queryKey,
-}: {
-  queryKey: [string, string];
-}) => {
-  const [, moduleId] = queryKey;
-  const response = await instance.get(`Module/${moduleId}`);
-  return response.data.data;
-};
-export const useFetcModules = (moduleFilter: ModulesPageProps) => {
-  return useQuery({
-    queryKey: ["module", moduleFilter],
-    queryFn: fetchModules,
+export const getModules = async (
+  filters: ModuleFilterProps
+): Promise<ModulesPageProps> => {
+  const queryParams = new URLSearchParams();
+  Object.entries(filters).forEach(([key, value]) => {
+    if (value !== undefined) {
+      queryParams.append(key, value.toString());
+    }
   });
+
+  const url = `${process.env.API_URL}/Module?${queryParams.toString()}`;
+  const response = await fetch(url);
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => null);
+    throw new Error(errorData?.errors?.[0] || "Failed to fetch modules.");
+  }
+
+  const data = await response.json();
+  return data.data;
 };
-export const useFetchSingleModule = (moduleId: string) => {
-  return useQuery({
-    queryKey: ["singleModule", moduleId],
-    queryFn: fetchSingleModule,
-  });
+
+export const getModuleById = async (id: string): Promise<ModulesPageProps> => {
+  const url = `${process.env.API_URL}/Module/${id}`;
+  const response = await fetch(url);
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => null);
+    throw new Error(errorData?.errors?.[0] || "Failed to fetch module by ID.");
+  }
+
+  const data = await response.json();
+  return Array.isArray(data) ? data[0] : data.data;
+
+  
 };

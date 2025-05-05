@@ -7,27 +7,24 @@ import instance from "@/axios";
 import { GoUpload } from "react-icons/go";
 import { useMutation } from "@tanstack/react-query";
 import { ModulesPageProps } from "@/types/moduleType";
-import { PathFilterProps, PathsProps } from "@/types/path";
-import { useFetchPaths } from "@/api/pathsApi";
+import { PathsProps } from "@/types/path";
 
 interface ModuleFormProps {
   initialData?: ModulesPageProps;
-  pathId?: string;
+  moduleId?: string;
   isEdit?: boolean;
+  pathsData: PathsProps;
 }
 
-const ModuleForm = ({ initialData, pathId, isEdit }: ModuleFormProps) => {
+const ModuleForm = ({
+  initialData,
+  moduleId,
+  isEdit,
+  pathsData,
+}: ModuleFormProps) => {
   const [image, setImage] = useState<File | string | undefined>(undefined);
-  const [loading,setLoading] = useState(false)
- const [pathFilter, ] = useState<PathFilterProps>({
-     PageIndex: 1,
-     PageSize: 5,
-     Difficulty:"",
-     SearchName:""
-   });
-
-  const { data: paths } = useFetchPaths(pathFilter);
-
+  const [loading, setLoading] = useState(false);
+  console.log(initialData);
   const {
     register,
     handleSubmit,
@@ -40,13 +37,23 @@ const ModuleForm = ({ initialData, pathId, isEdit }: ModuleFormProps) => {
       expectedTimeToComplete: initialData?.expectedTimeToComplete || "",
       difficulty: initialData?.difficulty || "",
       description: initialData?.description || "",
-      path: initialData?.path || "",
+      pathId: initialData?.pathId || "",
     },
   });
 
   useEffect(() => {
     if (initialData) {
-      reset(initialData);
+      console.log("Initial Data:", initialData);
+      const transformedData = {
+        ...initialData,
+        expectedTimeToComplete: initialData.expectedTimeToComplete
+          ? new Date(initialData.expectedTimeToComplete)
+              .toISOString()
+              .slice(0, 16)
+          : "",
+      };
+
+      reset(transformedData);
       setImage(initialData.attachment);
     }
   }, [initialData, reset]);
@@ -59,22 +66,18 @@ const ModuleForm = ({ initialData, pathId, isEdit }: ModuleFormProps) => {
 
   const { mutate } = useMutation({
     mutationFn: async (data: ModulesPageProps) => {
-      setLoading(true)
+      setLoading(true);
       const formData = new FormData();
       formData.append("Title", data.title ?? "");
-      formData.append("NumOfModules", data.numOfSections?.toString() ?? "");
+      formData.append("NumOfSections", data.numOfSections?.toString() ?? "");
       formData.append("Difficulty", data.difficulty ?? "");
       formData.append("Description", data.description ?? "");
-      formData.append("PathId", data.path ?? "");
+      formData.append("PathId", data.pathId ?? "");
 
-      if (data.expectedTimeToComplete) {
-        const utcDate = new Date(data.expectedTimeToComplete).toISOString();
-        formData.append("ExpectedTimeToComplete", utcDate);
-      }
       if (image instanceof File) formData.append("Attachment", image);
 
-      if (isEdit && pathId) {
-        await instance.put(`Module/${pathId}`, formData, {
+      if (isEdit && moduleId) {
+        await instance.put(`Module/${moduleId}`, formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
       } else {
@@ -83,14 +86,13 @@ const ModuleForm = ({ initialData, pathId, isEdit }: ModuleFormProps) => {
         });
       }
     },
-    onSettled:()=>{
-      setLoading(false)
+    onSettled: () => {
+      setLoading(false);
     },
     onSuccess: () => {
       toast.success(isEdit ? "Module Updated" : "Module Added");
       reset();
       setImage(undefined);
-  
     },
     onError: () => {
       toast.error("Failed to process Module");
@@ -100,138 +102,122 @@ const ModuleForm = ({ initialData, pathId, isEdit }: ModuleFormProps) => {
     mutate(data);
   };
 
-
   return (
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="grid grid-cols-2 gap-x-8 gap-y-2.5 max-w-full">
-          <div className="flex flex-col text-white gap-1.5">
-            <label htmlFor="Title">Title</label>
-            <input
-              id="Title"
-              type="text"
-              className="px-4 py-3 bg-white rounded-2xl text-black text-xl"
-              {...register("title", { required: "Title is required" })}
-            />
-            {errors.title && (
-              <p className="text-sm text-red-800">{errors.title.message}</p>
-            )}
-          </div>
-
-          <div className="flex flex-col text-white gap-1.5">
-            <label htmlFor="NumOfSections">Num Of Sections</label>
-            <input
-              id="NumOfSections"
-              type="number"
-              className="px-4 py-3 bg-white rounded-2xl text-black text-xl"
-              {...register("numOfSections", {
-                required: "Num Of Modules is required",
-              })}
-            />
-            {errors.numOfSections && (
-              <p className="text-sm text-red-800">
-                {errors.numOfSections.message}
-              </p>
-            )}
-          </div>
-
-          <div className="flex flex-col text-white gap-1.5">
-            <label htmlFor="ExpectedTimeToComplete">
-              Expected Time To Complete
-            </label>
-            <input
-              id="ExpectedTimeToComplete"
-              type="datetime-local"
-              className="px-4 py-3 bg-white rounded-2xl text-black text-xl"
-              {...register("expectedTimeToComplete", {
-                required: "This field is required",
-              })}
-            />
-          </div>
-
-          <div className="flex flex-col text-white gap-1.5">
-            <label htmlFor="Difficulty">Difficulty</label>
-            <select
-              id="Difficulty"
-              className="px-4 py-3 bg-white rounded-2xl text-black text-xl"
-              {...register("difficulty", {
-                required: "Difficulty is required",
-              })}
-            >
-              <option value="">Choose a Difficulty</option>
-              <option value="Easy">Easy</option>
-              <option value="Medium">Medium</option>
-              <option value="Hard">Hard</option>
-            </select>
-          </div>
-
-          <div className="flex flex-col text-white gap-1.5">
-            <label htmlFor="Path">Path</label>
-            <select
-              id="Path"
-              className="px-4 py-3 bg-white rounded-2xl text-black text-xl"
-              {...register("path", { required: "Path is required" })}
-            >
-              <option value="">Choose a Path</option>
-              {paths?.items?.map((path: PathsProps) => (
-                <option key={path.id} value={path.id}>
-                  {path.title}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-
-        <div className="flex flex-col text-white gap-1.5 mt-4">
-          <label htmlFor="Description">Description</label>
-          <textarea
-            id="Description"
-            {...register("description")}
-            className="px-4 py-3 bg-white rounded-2xl text-black text-xl h-48"
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <div className="grid grid-cols-2 gap-x-8 gap-y-2.5 max-w-full">
+        <div className="flex flex-col text-white gap-1.5">
+          <label htmlFor="Title">Title</label>
+          <input
+            id="Title"
+            type="text"
+            className="px-4 py-3 bg-white rounded-2xl text-black text-xl"
+            {...register("title", { required: "Title is required" })}
           />
+          {errors.title && (
+            <p className="text-sm text-red-800">{errors.title.message}</p>
+          )}
         </div>
-        {/* File Upload */}
-        <div>
-          <label
-            htmlFor="file"
-            className="flex flex-col text-white gap-1.5 mt-6 rounded-2xl"
-            style={{ border: !image ? "2px dashed var(--accent)" : "0" }}
+
+        <div className="flex flex-col text-white gap-1.5">
+          <label htmlFor="NumOfSections">Num Of Sections</label>
+          <input
+            id="NumOfSections"
+            type="number"
+            className="px-4 py-3 bg-white rounded-2xl text-black text-xl"
+            {...register("numOfSections", {
+              required: "Num Of Modules is required",
+            })}
+          />
+          {errors.numOfSections && (
+            <p className="text-sm text-red-800">
+              {errors.numOfSections.message}
+            </p>
+          )}
+        </div>
+
+        <div className="flex flex-col text-white gap-1.5">
+          <label htmlFor="Difficulty">Difficulty</label>
+          <select
+            id="Difficulty"
+            className="px-4 py-3 bg-white rounded-2xl text-black text-xl"
+            {...register("difficulty", {
+              required: "Difficulty is required",
+            })}
           >
-            <input id="file" type="file" onChange={handleImageChange} hidden  />
-            <div
-              className="flex flex-col rounded-2xl"
-              style={{
-                backgroundImage: image
-                  ? image instanceof File
-                    ? `url(${URL.createObjectURL(image)})`
-                    : `url(${image})`
-                  : "none",
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-                padding: "6rem",
-              }}
-            >
-              {!image && (
-                <div className="flex items-center flex-col gap-3">
-                  <GoUpload size={30} color="var(--accent)" />
-                  <h4 className="text-sm">
-                    Drag & Drop or <span>Choose file</span> to upload Image
-                    Cover
-                  </h4>
-                </div>
-              )}
-            </div>
-          </label>
+            <option value="">Choose a Difficulty</option>
+            <option value="Easy">Easy</option>
+            <option value="Medium">Medium</option>
+            <option value="Hard">Hard</option>
+          </select>
         </div>
-        <div className="flex justify-center mt-8">
-          <button
-            type="submit"
-            className="!bg-[var(--accent)] rounded-2xl px-8 py-1.5 text-white text-xl"
-            disabled={loading}
+
+        <div className="flex flex-col text-white gap-1.5">
+          <label htmlFor="Path">Path</label>
+          <select
+            id="Path"
+            className="px-4 py-3 bg-white rounded-2xl text-black text-xl"
+            {...register("pathId", { required: "Path is required" })}
           >
-            { loading ? "loading.." : isEdit ? "Save" : "Create Module"}
-          </button>
+            <option value="">Choose a Path</option>
+            {pathsData?.items?.map((path: PathsProps) => (
+              <option key={path.id} value={path.id}>
+                {path.title}
+              </option>
+            ))}
+          </select>
         </div>
-      </form>
+      </div>
+
+      <div className="flex flex-col text-white gap-1.5 mt-4">
+        <label htmlFor="Description">Description</label>
+        <textarea
+          id="Description"
+          {...register("description")}
+          className="px-4 py-3 bg-white rounded-2xl text-black text-xl h-48"
+        />
+      </div>
+      {/* File Upload */}
+      <div>
+        <label
+          htmlFor="file"
+          className="flex flex-col text-white gap-1.5 mt-6 rounded-2xl"
+          style={{ border: !image ? "2px dashed var(--accent)" : "0" }}
+        >
+          <input id="file" type="file" onChange={handleImageChange} hidden />
+          <div
+            className="flex flex-col rounded-2xl"
+            style={{
+              backgroundImage: image
+                ? image instanceof File
+                  ? `url(${URL.createObjectURL(image)})`
+                  : `url(${image})`
+                : "none",
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              padding: "6rem",
+            }}
+          >
+            {!image && (
+              <div className="flex items-center flex-col gap-3">
+                <GoUpload size={30} color="var(--accent)" />
+                <h4 className="text-sm">
+                  Drag & Drop or <span>Choose file</span> to upload Image Cover
+                </h4>
+              </div>
+            )}
+          </div>
+        </label>
+      </div>
+      <div className="flex justify-center mt-8">
+        <button
+          type="submit"
+          className="!bg-[var(--accent)] rounded-2xl px-8 py-1.5 text-white text-xl"
+          disabled={loading}
+        >
+          {loading ? "loading.." : isEdit ? "Save" : "Create Module"}
+        </button>
+      </div>
+    </form>
   );
 };
 

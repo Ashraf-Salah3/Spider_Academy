@@ -2,7 +2,7 @@ export interface QuestionsPageProps {
     title?: string;
     answer?:string;
     id?:number ;
-    sectionId?:number 
+    sectionId?:string 
 
 }
 export interface QuestionsFiltersProps {

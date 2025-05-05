@@ -1,12 +1,6 @@
-export interface PathsPageProps {
-    Title?: string;
-    Description?:string,
-    Difficulty?:string;
-    NumOfModules?:number;
-    Attachment?:string;
-    CreatedAt?:string;
-    file?: undefined;
-}
+import { ModulesPageProps } from "./moduleType";
+
+
 export interface PathFilterProps {
     PageIndex?:number;
     PageSize?:number;
@@ -23,7 +17,10 @@ export interface PathsProps {
     numOfModules?: number;
     attachment?: string;
     createdAt?: string;
-    difficulty?:string
+    difficulty?:string;
+    modules?:ModulesPageProps[]
+    pageSize?:number,
+    pageIndex?:number;
+    count?:number
+   items?:PathsProps[]
   }
-
- 

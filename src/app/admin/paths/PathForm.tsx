@@ -37,7 +37,6 @@ const PathForm = ({ isEdit, initialData, pathId }: PathFormProps) => {
     }
   }, [initialData, reset]);
 
- 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       setImage(e.target.files[0]);
@@ -89,7 +88,7 @@ const PathForm = ({ isEdit, initialData, pathId }: PathFormProps) => {
         <div className="flex flex-col  text-white gap-1.5">
           <label htmlFor="title">Title</label>
           <input
-            className="px-4 py-3 !bg-white rounded-2xl !text-black !text-xl"
+            className="px-4 py-3 bg-white rounded-2xl text-black text-xl"
             id="title"
             type="text"
             {...register("title", { required: "Title is required" })}
@@ -106,7 +105,7 @@ const PathForm = ({ isEdit, initialData, pathId }: PathFormProps) => {
             id="NumOfModules"
             type="number"
             min="1"
-            className="px-4 py-3 !bg-white rounded-2xl !text-black !text-xl"
+            className="px-4 py-3 bg-white rounded-2xl text-black text-xl"
             {...register("numOfModules", {
               required: "Num Of Modules is required",
               valueAsNumber: true,
@@ -124,7 +123,7 @@ const PathForm = ({ isEdit, initialData, pathId }: PathFormProps) => {
         <div className="flex flex-col  text-white gap-1.5">
           <label htmlFor="Difficulty">Difficulty</label>
           <select
-            className="px-4 py-3 !bg-white rounded-2xl !text-black !text-xl"
+            className="px-4 py-3 bg-white rounded-2xl text-black text-xl"
             id="Difficulty"
             {...register("difficulty", {
               required: "Difficulty is required",
@@ -146,7 +145,7 @@ const PathForm = ({ isEdit, initialData, pathId }: PathFormProps) => {
         <textarea
           id="Description"
           {...register("description")}
-          className="px-4 py-3 !bg-white rounded-2xl !text-black !text-xl h-48"
+          className="px-4 py-3 !bg-white rounded-2xl !text-black text-xl h-48"
         />
       </div>
 
@@ -157,13 +156,7 @@ const PathForm = ({ isEdit, initialData, pathId }: PathFormProps) => {
           className="flex flex-col text-white gap-1.5 mt-6 rounded-2xl"
           style={{ border: !image ? "2px dashed var(--accent)" : "0" }}
         >
-          <input
-            id="file"
-            type="file"
-            onChange={handleImageChange}
-            hidden
-            
-          />
+          <input id="file" type="file" onChange={handleImageChange} hidden />
           <div
             className="flex flex-col rounded-2xl"
             style={{

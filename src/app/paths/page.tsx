@@ -1,100 +1,95 @@
-"use client";
-
-import { useFetchPaths } from "@/api/pathsApi";
-import { PathFilterProps, PathsProps } from "@/types/path";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import { getPaths } from "@/api/pathsApi";
 import Image from "next/image";
-import React, { useState } from "react";
-import Loading from "../loading";
-import { Pagination, PaginationItem, Stack } from "@mui/material";
+import React from "react";
 import Link from "next/link";
+import { PaginationWithLinks } from "@/components/ui/pagination-with-links";
 
-const PathsPage = () => {
-  const [pathFilter, setPathFilter] = useState<PathFilterProps>({
-    PageIndex: 1,
-    PageSize: 3,
+interface SearchParams {
+  [key: string]: string | string[] | undefined;
+}
+
+const PathsPage = async ({
+  searchParams,
+}: {
+  searchParams: Promise<SearchParams>;
+}) => {
+  const params = await searchParams;
+
+  let curruntPage;
+  if (params?.page) {
+    curruntPage = parseInt((params.page as string) || "1");
+  }
+
+  const pageSize = 3;
+
+  const paths = await getPaths({
+    PageIndex: curruntPage || 1,
+    PageSize: pageSize,
     Difficulty: "",
     SearchName: "",
   });
-  const { data: paths, isLoading, isError } = useFetchPaths(pathFilter);
 
-  const totalPage = Math.ceil(paths?.count / paths?.pageSize || 1);
-  const handlePageChange = (
-    _event: React.ChangeEvent<unknown>,
-    page: number
-  ) => {
-    setPathFilter((prev) => ({ ...prev, PageIndex: page }));
-  };
+  const count = paths?.count || 0;
 
-  if (isLoading) return <Loading />;
-  if (isError) return <p className="loading">Faild Please Try Again</p>;
   return (
-    <div className="container min-h-[80vh] my-8">
-      <h2 className="text-4xl font-semibold text-white text-center  mb-8">
+    <div className="container min-h-[80vh] my-8 mt-5 flex flex-col">
+      <h2 className="text-center text-white w-fit border-b-3 border-[var(--accent)] mx-auto my-4 font-bold text-2xl mb-8">
         Paths
       </h2>
-      <div className="grid gap-10 grid-cols-[repeat(auto-fill,minmax(300px,1fr))]">
-        {paths?.items?.map((path: PathsProps, index: number) => (
+
+      <div className="grid gap-10 grid-cols-[repeat(auto-fill,minmax(300px,1fr))] mb-8 ">
+        {paths?.items?.map((path, index) => (
           <div
             key={index}
-            className="box text-center border-[#ccc] border-2 rounded-lg text-white "
+            className="box text-center border-[#ccc] border-2 rounded-lg text-white flex flex-col cursor-pointer overflow-hidden"
           >
             <div className="custom-image-effect relative overflow-hidden ">
               {path?.attachment && (
                 <Image
-                  className="h-[300px] w-full object-cover"
+                  className="h-[300px] w-full object-cover "
                   src={path.attachment}
                   alt={path.title || ""}
                   height={300}
                   width={500}
+                  priority
                 />
               )}
             </div>
-            <h2 className="text-3xl m-auto  w-fit relative after:absolute after:w-[calc(100%-30px)] after:h-1 after:bottom-[-20px] after:left-4 after:bg-[var(--accent)]">
+
+            <h2 className="text-3xl m-auto w-fit relative after:absolute after:w-[calc(100%-30px)] after:h-1 after:bottom-[-20px] after:left-4 after:bg-[var(--accent)]">
               {path.title}
             </h2>
-            <p className="text-[#777] text-lg p-6 mt-5 overflow-ellipsis line-clamp-1  border-b-1 border-white ">
+
+            <p className="text-[#777] text-lg p-6 mt-5 break-all line-clamp-2">
               {path.description}
             </p>
 
-            <div className="flex items-center justify-between p-3">
+            <div className="flex items-center justify-between p-5 mt-auto">
               <Link
-                href={`/modules/${path.id}`}
-                className="py-1 px-4 block border-[var(--accent)] border-2 w-fit  font-bold rounded-lg  bg-[var(--accent)]"
+                href={`/path/${path.id}`}
+                className="py-1 px-4 block border-[var(--accent)] border-2 w-fit font-bold rounded-lg bg-[var(--accent)]"
               >
                 Enroll
               </Link>
-         
-            <p className="bg-gray-600 w-fit  font-semibold rounded-lg py-1 px-4">
-              {path.numOfModules}{" "}
-              {path.numOfModules && path.numOfModules > 1
-                ? "Modules"
-                : "Module"}
-            </p>
+              <p className="bg-gray-600 w-fit font-semibold rounded-lg py-1 px-4">
+                {path.numOfModules}{" "}
+                {path.numOfModules && path.numOfModules > 1
+                  ? "Modules"
+                  : "Module"}
+              </p>
             </div>
           </div>
         ))}
       </div>
-      {totalPage > 1 && (
-        <div className="mt-6 flex items-center justify-center">
-          <Stack spacing={2}>
-            <Pagination
-              count={totalPage}
-              page={pathFilter?.PageIndex || 1}
-              color="primary"
-              onChange={handlePageChange}
-              renderItem={(item) => (
-                <PaginationItem
-                  slots={{ previous: ArrowBackIcon, next: ArrowForwardIcon }}
-                  {...item}
-                  className="!text-white"
-                />
-              )}
-            />
-          </Stack>
+  
+        <div className="!text-white mt-auto">
+          <PaginationWithLinks
+            page={curruntPage || 1}
+            pageSize={pageSize}
+            totalCount={count}
+          />
         </div>
-      )}
+
     </div>
   );
 };

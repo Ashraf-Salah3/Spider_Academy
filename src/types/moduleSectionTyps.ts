@@ -12,4 +12,5 @@ export interface ModuleSectionPageProps {
     id?:number | undefined;
     attachment?:string | undefined;
     moduleId?: number | string;
+    count?:number
 }

@@ -1,45 +1,42 @@
-import instance from "@/axios";
-import { ModuleSectionFilterProps } from "@/types/moduleSectionTyps";
-import { useQuery } from "@tanstack/react-query";
+import {
+  ModuleSectionFilterProps,
+  ModuleSectionPageProps,
+} from "@/types/moduleSectionTyps";
 
-const fetchModuleSection = async ({
-  queryKey,
-}: {
-  queryKey: [string, Partial<ModuleSectionFilterProps>];
-}) => {
-  const [, moduleSectionFilter] = queryKey;
-  const response = await instance.get("ModuleSection", {
-    params: moduleSectionFilter,
+export const getModulesSection = async (
+  filters: ModuleSectionFilterProps
+): Promise<ModuleSectionPageProps[]> => {
+  const queryParams = new URLSearchParams();
+
+  Object.entries(filters).forEach(([key, value]) => {
+    if (value !== undefined) {
+      queryParams.append(key, value.toString());
+    }
   });
-  return response.data.data;
+
+  const response = await fetch(
+    `${process.env.API_URL}/ModuleSection?${queryParams}`
+  );
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => null);
+    throw new Error(errorData?.errors?.[0] || "Failed to fetch Sections .");
+  }
+
+  const data = await response.json();
+  return data.data;
 };
 
+export const getSectionById = async (
+  id: string
+): Promise<ModuleSectionPageProps> => {
+  const response = await fetch(`${process.env.API_URL}/ModuleSection/${id}`);
 
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => null);
+    throw new Error(errorData?.errors?.[0] || "Failed to fetch Section .");
+  }
 
-const fetchSingleModuleSection = async ({
-  queryKey,
-}: {
-  queryKey: [string, string];
-}) => {
-  const [, moduleSectionId] = queryKey;
-  const response = await instance.get(`ModuleSection/${moduleSectionId}`);
-  return response.data.data;
-};
-
-
-
-export const useFetchModuleSection = (
-  moduleSectionFilter?: Partial<ModuleSectionFilterProps>
-) => {
-  return useQuery({
-    queryKey: ["moduleSection", moduleSectionFilter || {}],
-    queryFn: fetchModuleSection,
-  });
-};
-
-export const useFetchSingleModuleSection = (moduleSectionId: string) => {
-  return useQuery({
-    queryKey: ["singleModule", moduleSectionId],
-    queryFn: fetchSingleModuleSection,
-  });
+  const data = await response.json();
+  return Array.isArray(data) ? data[0] : data.data;
 };

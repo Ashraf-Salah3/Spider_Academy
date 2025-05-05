@@ -1,3 +1,5 @@
+import { ModuleSectionPageProps } from "./moduleSectionTyps";
+
 export interface ModulesPageProps{
     id?: number;
     title?:string;
@@ -8,10 +10,13 @@ export interface ModulesPageProps{
     expectedTimeToComplete?:string;
     isAccepted?:boolean;
     acceptedAt?:string;
-    path?:string;
+    pathId?:string;
     PageIndex?:number;
     PageSize?:number;
-    SearchName?:string;
+    sections?:ModuleSectionPageProps[]
+    items?:[],
+    path?:string
+    count?:number
 }
 
 export interface ModuleFilterProps {

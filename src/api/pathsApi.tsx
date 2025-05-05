@@ -1,39 +1,34 @@
-"use client";
+import { PathFilterProps, PathsProps } from "@/types/path";
 
-import instance from "@/axios";
-import { PathsPageProps, PathsProps } from "@/types/path";
-import {useQuery } from "@tanstack/react-query";
+export const getPaths = async (
+  filters: PathFilterProps
+): Promise<PathsProps> => {
 
-const fetchPaths = async ({
-  queryKey,
-}: {
-  queryKey: [string, PathsPageProps];
-}) => {
-  const [, pathsFilter] = queryKey;
-  const response = await instance.get(`EducationalPath`, {
-    params: pathsFilter,
+  const queryParams = new URLSearchParams();
+  Object.entries(filters).forEach(([key, value]) => {
+    if (value !== undefined) {
+      queryParams.append(key, value.toString());
+    }
   });
-  return response.data.data;
+  const response = await fetch(
+    `${process.env.API_URL}/EducationalPath?${queryParams}`
+  );
+  if (!response.ok) {
+    throw new Error("Failed to fetch paths");
+  }
+  const data = await response.json();
+
+  return data.data;
 };
 
-const fetchPathId = async ({queryKey,}:{
-    queryKey: [string,string]
-}):Promise<PathsProps> =>{
-  const [,pathId] = queryKey;
-  const response = await instance.get(`EducationalPath/${pathId}`);
-  return response.data.data;
-}
+// Fetch a specific path by ID using fetch instead of axios
+export const getPathById = async (id: string): Promise<PathsProps> => {
+  const response = await fetch(`${process.env.API_URL}/EducationalPath/${id}`)
 
-export const useFetchPaths = (pathsFilter: PathsPageProps) => {
-  return useQuery({
-    queryKey: ["paths", pathsFilter],
-    queryFn: fetchPaths,
-  });
+  if (!response.ok) {
+    throw new Error("Failed to fetch path by ID");
+  }
+
+  const data = await response.json();
+  return Array.isArray(data) ? data[0] : data.data;
 };
-export const useFetchPathId = (pathId:string) =>{
-  return useQuery({
-    queryKey: ["path", pathId],
-    queryFn: fetchPathId,
-  });
-}
-

@@ -1,28 +1,34 @@
-import instance from "@/axios";
-import { QuestionsFiltersProps } from "@/types/questionsType";
-import { useQuery } from "@tanstack/react-query";
+import {
+  QuestionsFiltersProps,
+  QuestionsPageProps,
+} from "@/types/questionsType";
+import { toast } from "sonner";
 
 // Fetching function
-const fetchQuestions = async ({
-  queryKey,
-}: {
-  queryKey: [string, QuestionsFiltersProps | undefined];
-}) => {
-  const [, questionFilters] = queryKey;
-  
-  // Check if questionFilters is undefined and pass an empty object instead
-  const response = await instance.get("Quiz", {
-    params: questionFilters || {},
+export const fetchQuestions = async (
+  filters: QuestionsFiltersProps
+): Promise<QuestionsPageProps[]> => {
+  const query = new URLSearchParams(
+    filters as Record<string, string>
+  ).toString();
+
+  const res = await fetch(`${process.env.API_URL}/Quiz?${query}`, {
+    next: { revalidate: 60 },
   });
 
-  return response.data.data;
+  if (!res.ok) {
+    toast.error("faild Please Try Again");
+    return [];
+  }
+
+  const data = await res.json();
+  return data.data;
 };
 
+export const fetchQuestionsById = async (id: string) => {
+  const response = await fetch(`${process.env.API_URL}/Quiz/${id}`);
+
+  const data = await response.json();
+  return Array.isArray(data) ? data[0] : data;
+};
 // Custom hook for fetching questions
-export const useFetchQuestions = (questionFilters: QuestionsFiltersProps | undefined) => {
-  return useQuery({
-    queryKey: ["question", questionFilters],
-    queryFn: fetchQuestions,
-  });
-};
-

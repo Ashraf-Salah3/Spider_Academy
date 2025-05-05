@@ -4,11 +4,30 @@ import { logo } from "@/assets";
 import clsx from "clsx";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import React from "react";
+import { usePathname, useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
+import { FiLogOut } from "react-icons/fi";
+//import { HiOutlineMenuAlt3 } from "react-icons/hi";
 
 const Header = () => {
   const pathName = usePathname();
+   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+  const router = useRouter()
+    useEffect(() => {
+      const token = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("academyToken="))
+        ?.split("=")[1];
+  
+      setIsAuthenticated(!!token);
+    }, []);
+
+      const handleLogout = () => {
+        document.cookie = "academyToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+        document.cookie = "nameIdentifier=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+        router.push("/login");
+      };
+  
   return (
     <header className="flex items-center justify-between py-1  px-8 sticky top-0 z-50 bg-[#0e101b]">
       <div className="flex items-center text-white  ">
@@ -31,13 +50,17 @@ const Header = () => {
                 pathName.includes("modules"),
             })}
           >
-            <Link href="modules">Modules</Link>
+            <Link href="/modules">Modules</Link>
           </li>
         </ul>
       </nav>
-      <div className="text-white">
-        <a >Contact Us</a>
-      </div>
+      <div>
+      {isAuthenticated && (
+              <button onClick={handleLogout}>
+                <FiLogOut color="white" size={20}/>
+              </button>
+            )}
+          </div>
     </header>
   );
 };

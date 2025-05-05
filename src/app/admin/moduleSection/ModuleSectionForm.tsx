@@ -1,6 +1,5 @@
-"use client"
+"use client";
 
-import { useFetcModules } from "@/api/modulesApi";
 import instance from "@/axios";
 import { ModuleSectionPageProps } from "@/types/moduleSectionTyps";
 import { ModulesPageProps } from "@/types/moduleType";
@@ -10,25 +9,22 @@ import { useForm } from "react-hook-form";
 import { GoUpload } from "react-icons/go";
 import { toast } from "sonner";
 
-
 interface ModuleFormProps {
   initialData?: ModuleSectionPageProps;
   moduleSectionId?: number | string;
   isEdit?: boolean;
+  modules: ModulesPageProps;
 }
 
 const ModuleSectionForm = ({
   initialData,
   moduleSectionId,
   isEdit,
+  modules,
 }: ModuleFormProps) => {
-
   const [image, setImage] = useState<File | string | undefined>(undefined);
 
-  const { data: modules } = useFetcModules({});
-
-
-
+  
   const {
     register,
     handleSubmit,
@@ -55,37 +51,28 @@ const ModuleSectionForm = ({
     }
   };
 
-
-
   const { mutate } = useMutation({
     mutationFn: async (data: ModuleSectionPageProps) => {
-        const formData = new FormData();
-      formData.append("Title", data.title?? "");
-      formData.append("Body", data.body?? "");
-      formData.append("ModuleId", data.moduleId?.toString()?? "");
-     
-        if (image instanceof File) formData.append("Attachment", image);
-    
-    
-      if (isEdit) {
-        await instance.put(`ModuleSection/${moduleSectionId}`, 
-          formData,{
+      const formData = new FormData();
+      formData.append("Title", data.title ?? "");
+      formData.append("Body", data.body ?? "");
+      formData.append("ModuleId", data.moduleId?.toString() ?? "");
 
-            headers: { "Content-Type": "multipart/form-data" },
-          }
-        );
+      if (image instanceof File) formData.append("Attachment", image);
+
+      if (isEdit) {
+        await instance.put(`ModuleSection/${moduleSectionId}`, formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
       } else {
-        await instance.post(`ModuleSection`, 
-     formData,{
-        headers: { "Content-Type": "multipart/form-data" },
-     }
-        );
+        await instance.post(`ModuleSection`, formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
       }
     },
     onSuccess: () => {
-        toast.success(isEdit? "Module Section Updated" : "Module Section Added");
+      toast.success(isEdit ? "Module Section Updated" : "Module Section Added");
 
-      
       reset(initialData);
       setImage(undefined);
     },
@@ -97,7 +84,7 @@ const ModuleSectionForm = ({
   const onSubmit = (data: ModuleSectionPageProps) => {
     mutate(data);
   };
-  console.log(image)
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="grid grid-cols-2 gap-x-8 gap-y-2.5 max-w-full">

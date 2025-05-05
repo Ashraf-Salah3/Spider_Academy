@@ -11,7 +11,7 @@ const AddModulePage = async() => {
         </h2>
       </div>
 
-      <ModuleForm isEdit={false} pathsData={pathsData}/>
+      <ModuleForm isEdit={false} pathsData={pathsData || []}/>
     </div>
   );
 };

@@ -1,4 +1,5 @@
 import { ModuleFilterProps, ModulesPageProps } from "@/types/moduleType";
+import API_URL from "../../configapi";
 
 export const getModules = async (
   filters: ModuleFilterProps
@@ -10,7 +11,7 @@ export const getModules = async (
     }
   });
 
-  const url = `${process.env.API_URL}/Module?${queryParams.toString()}`;
+  const url = `${API_URL}/Module?${queryParams.toString()}`;
   const response = await fetch(url);
 
   if (!response.ok) {
@@ -23,7 +24,7 @@ export const getModules = async (
 };
 
 export const getModuleById = async (id: string): Promise<ModulesPageProps> => {
-  const url = `${process.env.API_URL}/Module/${id}`;
+  const url = `${API_URL}/Module/${id}`;
   const response = await fetch(url);
 
   if (!response.ok) {
@@ -33,6 +34,4 @@ export const getModuleById = async (id: string): Promise<ModulesPageProps> => {
 
   const data = await response.json();
   return Array.isArray(data) ? data[0] : data.data;
-
-  
 };

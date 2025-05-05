@@ -1,4 +1,5 @@
 import { PathFilterProps, PathsProps } from "@/types/path";
+import API_URL from "../../configapi";
 
 export const getPaths = async (
   filters: PathFilterProps
@@ -11,7 +12,7 @@ export const getPaths = async (
     }
   });
   const response = await fetch(
-    `${process.env.API_URL}/EducationalPath?${queryParams}`
+    `${API_URL}/EducationalPath?${queryParams}`
   );
   if (!response.ok) {
     throw new Error("Failed to fetch paths");
@@ -23,7 +24,7 @@ export const getPaths = async (
 
 // Fetch a specific path by ID using fetch instead of axios
 export const getPathById = async (id: string): Promise<PathsProps> => {
-  const response = await fetch(`${process.env.API_URL}/EducationalPath/${id}`)
+  const response = await fetch(`${API_URL}/EducationalPath/${id}`)
 
   if (!response.ok) {
     throw new Error("Failed to fetch path by ID");

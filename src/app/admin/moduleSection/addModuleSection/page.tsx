@@ -13,7 +13,7 @@ const AddModuleSectionPage = async () => {
         </h2>
       </div>
 
-      <ModuleSectionForm isEdit={false} modules={modules} />
+      <ModuleSectionForm isEdit={false} modules={modules || []} />
     </div>
   );
 };

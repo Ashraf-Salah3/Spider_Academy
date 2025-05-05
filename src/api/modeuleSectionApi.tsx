@@ -2,6 +2,7 @@ import {
   ModuleSectionFilterProps,
   ModuleSectionPageProps,
 } from "@/types/moduleSectionTyps";
+import API_URL from "../../configapi";
 
 export const getModulesSection = async (
   filters: ModuleSectionFilterProps
@@ -15,7 +16,7 @@ export const getModulesSection = async (
   });
 
   const response = await fetch(
-    `${process.env.API_URL}/ModuleSection?${queryParams}`
+    `${API_URL}/ModuleSection?${queryParams}`
   );
 
   if (!response.ok) {
@@ -30,7 +31,7 @@ export const getModulesSection = async (
 export const getSectionById = async (
   id: string
 ): Promise<ModuleSectionPageProps> => {
-  const response = await fetch(`${process.env.API_URL}/ModuleSection/${id}`);
+  const response = await fetch(`${API_URL}/ModuleSection/${id}`);
 
   if (!response.ok) {
     const errorData = await response.json().catch(() => null);

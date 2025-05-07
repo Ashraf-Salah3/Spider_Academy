@@ -4,6 +4,7 @@ import "./globals.css";
 import { Toaster } from "sonner";
 import BodyWrapper from "@/components/BodyWrapper";
 import QueryProvider from "@/components/QueryProvider";
+import ProtectedRoute from "@/components/ProtectedRoute";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,8 +33,10 @@ export default function RootLayout({
       >
         <BodyWrapper>
           <QueryProvider>
-            <Toaster richColors position="top-center" />
-            {children}
+            <ProtectedRoute>
+              <Toaster richColors position="top-center" />
+              {children}
+            </ProtectedRoute>
           </QueryProvider>
         </BodyWrapper>
       </body>

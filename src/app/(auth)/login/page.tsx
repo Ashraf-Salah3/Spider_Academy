@@ -5,7 +5,7 @@ import { LuLock } from "react-icons/lu";
 import { useForm } from "react-hook-form";
 import { jwtDecode, JwtPayload } from "jwt-decode";
 import { toast } from "sonner";
-import {  useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import instance from "@/axios";
 import { LoginProps } from "@/types/auth";
 import Link from "next/link";
@@ -46,7 +46,10 @@ const Login = () => {
             decodedToken[
               "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
             ];
-          document.cookie = `nameIdentifier=${userId}; path=/;`;
+          if (userId) {
+            localStorage.setItem("userId", userId);
+          }
+          // document.cookie = `nameIdentifier=${userId}; path=/;`;
           router.push("/paths");
           reset();
         }

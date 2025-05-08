@@ -17,7 +17,7 @@ const ModuleDetails = ({ module }: { module: ModulesPageProps }) => {
     }
   }, [module, section]);
   return (
-    <section className="p-8 lg:px-20">
+    <section className="p-4 md:px-20">
       <h2 className="text-center text-white w-fit border-b-4 border-[var(--accent)] mx-auto font-semibold text-2xl mb-8">
         {module.title?.toUpperCase()} MODULE
       </h2>
@@ -47,7 +47,7 @@ const ModuleDetails = ({ module }: { module: ModulesPageProps }) => {
               alt=""
               width={500}
               height={500}
-              className="w-full object-cover mb-8 rounded-xl"
+              className="w-full object-cover mb-8 md:h-[30rem] rounded-xl"
             />
           )}
 

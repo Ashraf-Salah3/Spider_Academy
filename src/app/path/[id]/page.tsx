@@ -30,7 +30,7 @@ const PathPage = async ({ params }: { params: Promise<{ id: string }> }) => {
         {path.title?.toUpperCase()} PATH
       </h2>
       <div className=" rounded-xl bg-[var(--btn-color)] p-4 mb-4">
-        <div className="flex items-center gap-8 ">
+        <div className="flex flex-col md:flex-row  items-center gap-8 ">
           {path?.attachment && (
             <Image
               src={path?.attachment}

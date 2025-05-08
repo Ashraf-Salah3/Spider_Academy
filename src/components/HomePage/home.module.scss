@@ -81,6 +81,34 @@
         }
       }
     }
+
+    .typewriter {
+      overflow: hidden;
+      white-space: nowrap;
+      width: 0;
+      animation: typewriter 3s forwards, blinkCursor 0.75s step-end infinite;
+    }
+    
+  }
+  @media screen and (max-width:800px) {
+    .homeItem{
+      position: relative;
+      h2{
+        font-size: 40px;
+        width: 100%;
+        line-height: normal;
+      }
+      .desc{
+        width: 100%;
+        max-width: 100%;
+      }
+    .typewriter{
+      animation: none;
+      overflow: visible;
+      width: 100%;
+      white-space:inherit;
+    }
+  }
   }
 }
 
@@ -102,9 +130,3 @@
   }
 }
 
-.typewriter {
-  overflow: hidden;
-  white-space: nowrap;
-  width: 0;
-  animation: typewriter 3s forwards, blinkCursor 0.75s step-end infinite;
-}

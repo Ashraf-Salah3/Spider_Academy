@@ -1,28 +1,31 @@
 "use client";
-import { useRouter } from "next/navigation";
+import { redirect, usePathname } from "next/navigation";
 import React, { ReactNode, useEffect } from "react";
+
 type Props = {
   children: ReactNode;
 };
 
 const ProtectedRoute = ({ children }: Props) => {
-  const router = useRouter();
-
-  // function getCookie(name: string): string | undefined {
-  //   const value = `; ${document.cookie}`;
-  //   const parts = value.split(`; ${name}=`);
-  //   if (parts.length === 2) return parts.pop()?.split(";").shift();
-  // }
+  const pathname = usePathname();
 
   useEffect(() => {
     const token = localStorage.getItem("userId");
 
-    if (!token) {
-      router.push("/login");
-      return;
+    if (
+      !token &&
+      pathname !== "/" &&
+      pathname !== "/login" &&
+      pathname !== "/register" &&
+      pathname !== "/reset-password" &&
+      pathname !== "/forget-password"
+    ) {
+      redirect("/login");
     }
-  }, [router]);
-  return <div>{children}</div>;
+  }, [pathname]);
+
+
+  return <>{children}</>;
 };
 
 export default ProtectedRoute;

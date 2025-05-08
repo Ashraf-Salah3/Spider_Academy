@@ -13,7 +13,7 @@
   position: relative;
   min-height: 80vh;
 
-  &::before{
+  &::before {
     content: "";
     position: absolute;
     top: 0;
@@ -75,7 +75,8 @@
           width: 100%;
           color: black !important;
         }
-        input,select {
+        input,
+        select {
           display: block;
           margin-top: 8px;
           padding: 0.8rem;
@@ -101,7 +102,7 @@
       .invalid input {
         border: 1px solid #b40e0e;
       }
-      
+
       .error-text {
         color: #b40e0e;
         font-size: 10px;
@@ -143,9 +144,28 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
     }
-    button{
+    button {
       width: 70%;
       margin: 15px auto;
+    }
+  }
+  @media screen and (max-width: 800px) {
+    padding: 1rem;
+    .form {
+      max-width: 100%;
+      width: 100%;
+      padding: 1rem;
+
+     
+    }
+    .register-form {
+
+      .form-input {
+        display: block;
+      }
+      button {
+        width: 100%;
+      }
     }
   }
 }

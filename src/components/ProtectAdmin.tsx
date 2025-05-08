@@ -18,15 +18,15 @@ const ProtectAdmin = ({ children }: Props) => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
-  function getCookie(name: string): string | undefined {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts.pop()?.split(";").shift();
-  }
+  // function getCookie(name: string): string | undefined {
+  //   const value = `; ${document.cookie}`;
+  //   const parts = value.split(`; ${name}=`);
+  //   if (parts.length === 2) return parts.pop()?.split(";").shift();
+  // }
 
   useEffect(() => {
     setLoading(true);
-    const token = getCookie("academyToken");
+    const token = localStorage.getItem("userId");
 
     if (!token) {
       router.push("/");

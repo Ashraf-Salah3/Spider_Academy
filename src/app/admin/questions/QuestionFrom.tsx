@@ -15,7 +15,6 @@ interface QuestionsProps {
 }
 const QuestionFrom = ({ isEdit, initialData, questionId , sections}: QuestionsProps) => {
  
-  console.log(initialData)
   const [loading, setLoading] = useState(false);
 
   const {

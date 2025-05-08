@@ -23,8 +23,6 @@ const ModuleSectionForm = ({
   modules,
 }: ModuleFormProps) => {
   const [image, setImage] = useState<File | string | undefined>(undefined);
- console.log(modules)
-  
   const {
     register,
     handleSubmit,

@@ -24,7 +24,6 @@ const ModuleForm = ({
 }: ModuleFormProps) => {
   const [image, setImage] = useState<File | string | undefined>(undefined);
   const [loading, setLoading] = useState(false);
-  console.log(initialData);
   const {
     register,
     handleSubmit,
@@ -43,7 +42,6 @@ const ModuleForm = ({
 
   useEffect(() => {
     if (initialData) {
-      console.log("Initial Data:", initialData);
       const transformedData = {
         ...initialData,
         expectedTimeToComplete: initialData.expectedTimeToComplete

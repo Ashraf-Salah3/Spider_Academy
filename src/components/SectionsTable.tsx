@@ -25,7 +25,7 @@ import {
   ModuleSectionPageProps,
 } from "@/types/moduleSectionTyps";
 
-const SectionsTable = ({moduleSection}:{moduleSection:ModuleSectionPageProps[]}) => {
+const SectionsTable = ({moduleSection}:{moduleSection: ModuleSectionPageProps[]}) => {
 
     const router = useRouter();
 
@@ -39,9 +39,9 @@ const SectionsTable = ({moduleSection}:{moduleSection:ModuleSectionPageProps[]})
   
     const { mutate } = useMutation({
       mutationFn: async (id?: number) => {
-        if (confirm("you want to delete this Module, Are you sure?")) {
+       
           await instance.delete(`ModuleSection/${id}`);
-        }
+        
 
       },
       onSuccess: () => {

@@ -3,7 +3,7 @@ import {
   QuestionsPageProps,
 } from "@/types/questionsType";
 import { toast } from "sonner";
-import API_URL from "../../configapi";
+
 
 // Fetching function
 export const fetchQuestions = async (
@@ -13,7 +13,7 @@ export const fetchQuestions = async (
     filters as Record<string, string>
   ).toString();
 
-  const res = await fetch(`${API_URL}/Quiz?${query}`, {
+  const res = await fetch(`https://spideracademy.runasp.net/api/Quiz?${query}`, {
     next: { revalidate: 60 },
   });
 
@@ -27,7 +27,7 @@ export const fetchQuestions = async (
 };
 
 export const fetchQuestionsById = async (id: string) => {
-  const response = await fetch(`${API_URL}/Quiz/${id}`);
+  const response = await fetch(`https://spideracademy.runasp.net/api/Quiz/${id}`);
 
   const data = await response.json();
   return Array.isArray(data) ? data[0] : data;

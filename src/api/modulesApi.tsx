@@ -1,5 +1,5 @@
 import { ModuleFilterProps, ModulesPageProps } from "@/types/moduleType";
-import API_URL from "../../configapi";
+
 
 export const getModules = async (
   filters: ModuleFilterProps
@@ -11,7 +11,7 @@ export const getModules = async (
     }
   });
 
-  const url = `${API_URL}/Module?${queryParams.toString()}`;
+  const url = `https://spideracademy.runasp.net/api/Module?${queryParams.toString()}`;
   const response = await fetch(url);
 
   if (!response.ok) {
@@ -24,7 +24,7 @@ export const getModules = async (
 };
 
 export const getModuleById = async (id: string): Promise<ModulesPageProps> => {
-  const url = `${API_URL}/Module/${id}`;
+  const url = `https://spideracademy.runasp.net/api/Module/${id}`;
   const response = await fetch(url);
 
   if (!response.ok) {

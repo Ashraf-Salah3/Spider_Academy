@@ -23,7 +23,7 @@ const ModuleSectionForm = ({
   modules,
 }: ModuleFormProps) => {
   const [image, setImage] = useState<File | string | undefined>(undefined);
-
+ console.log(modules)
   
   const {
     register,
@@ -108,7 +108,7 @@ const ModuleSectionForm = ({
             className="px-4 py-3 bg-white rounded-2xl text-black text-xl"
             {...register("moduleId", { required: "Module is required" })}
           >
-            <option value="">Choose a Path</option>
+            <option value="">Choose a Module</option>
             {modules?.items?.map((module: ModulesPageProps) => (
               <option key={module.id} value={module.id}>
                 {module.title}

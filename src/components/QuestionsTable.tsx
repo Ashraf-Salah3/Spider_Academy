@@ -88,7 +88,7 @@ const QuestionsTable = ({ questions }: Props) => {
             <TableRow>
               {["Id", "Title", "Answer", "Action"].map((header) => (
                 <TableCell key={header}>
-                  <div className="text-white text-center font-light text-xl">
+                  <div className="text-white text-center font-light break-words text-xl">
                     {header}
                   </div>
                 </TableCell>
@@ -97,14 +97,14 @@ const QuestionsTable = ({ questions }: Props) => {
           </TableHead>
           <TableBody>
             {questions?.map((question) => (
-              <TableRow key={question.id}>
-                <TableCell className="!text-white text-center">
+              <TableRow key={question.id} className="break-words max-w-full">
+                <TableCell className="!text-white !text-center break-words">
                   {question.id}
                 </TableCell>
-                <TableCell className="!text-white text-center">
+                <TableCell className="!text-white !text-center break-words">
                   {question.title}
                 </TableCell>
-                <TableCell className="!text-white text-center">
+                <TableCell className="!text-white !text-center break-words">
                   {question.answer}
                 </TableCell>
                 <TableCell>

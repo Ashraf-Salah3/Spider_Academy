@@ -22,7 +22,7 @@ import { useMutation } from "@tanstack/react-query";
 import instance from "@/axios";
 import { toast } from "sonner";
 import { ModulesPageProps } from "@/types/moduleType";
-import { format, formatDistanceToNow } from "date-fns";
+
 
 
 const ModuleTable = ({ modules }: { modules: ModulesPageProps }) => {
@@ -30,28 +30,11 @@ const ModuleTable = ({ modules }: { modules: ModulesPageProps }) => {
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedModuleId, setSelectedModuleId] = useState<number | null>(null);
 
-  const formData = (
-    dateStr: string | undefined
-  ): { formattedDate: string; timeLeft: string } => {
-    if (!dateStr) {
-      return { formattedDate: "N/A", timeLeft: "N/A" };
-    }
 
-    const utcDate = new Date(dateStr);
 
-    if (isNaN(utcDate.getTime())) {
-      return { formattedDate: "Invalid Date", timeLeft: "Invalid Date" };
-    }
+   
 
-    const localDate = new Date(
-      utcDate.getTime() - utcDate.getTimezoneOffset() * 60000
-    );
 
-    const formattedDate = format(localDate, "MMM dd, yyyy");
-    const timeLeft = formatDistanceToNow(localDate, { addSuffix: true });
-
-    return { formattedDate, timeLeft };
-  };
   const { mutate } = useMutation({
     mutationFn: async (id: number) => {
       await instance.delete(`Module/${id}`);
@@ -107,7 +90,7 @@ const ModuleTable = ({ modules }: { modules: ModulesPageProps }) => {
                 "Description",
                 "Difficulty",
                 "Num Of Sections",
-                "Expected Time To Complete",
+            
                 "Path",
                 "Action",
               ].map((header) => (
@@ -137,11 +120,9 @@ const ModuleTable = ({ modules }: { modules: ModulesPageProps }) => {
                 <TableCell className="!text-white !text-center  !break-words ">
                   {module.numOfSections}
                 </TableCell>
+          
                 <TableCell className="!text-white !text-center break-words ">
-                  {formData(module.expectedTimeToComplete).formattedDate}
-                </TableCell>
-                <TableCell className="!text-white !text-center break-words ">
-                  {module.path}
+                  {module.pathName}
                 </TableCell>
                 <TableCell>
                   <div className="!flex items-center justify-center gap-4">

@@ -1,6 +1,5 @@
 import { ModuleFilterProps, ModulesPageProps } from "@/types/moduleType";
 
-
 export const getModules = async (
   filters: ModuleFilterProps
 ): Promise<ModulesPageProps> => {
@@ -11,9 +10,12 @@ export const getModules = async (
     }
   });
 
-  const url = `${process.env.NEXT_PUBLIC_API_URL}/Module?${queryParams.toString()}`;
+  const url = `${
+    process.env.NEXT_PUBLIC_API_URL
+  }/Module?${queryParams.toString()}`;
   const response = await fetch(url, {
-    cache: 'no-store'});
+    cache: "no-store",
+  });
 
   if (!response.ok) {
     const errorData = await response.json().catch(() => null);
@@ -25,9 +27,10 @@ export const getModules = async (
 };
 
 export const getModuleById = async (id: string): Promise<ModulesPageProps> => {
-  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/Module/${id}`;
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/Module/${id}`;
   const response = await fetch(url, {
-    cache: 'no-store'});
+    cache: "no-store",
+  });
 
   if (!response.ok) {
     const errorData = await response.json().catch(() => null);

@@ -15,7 +15,7 @@ export interface ModulesPageProps{
     PageSize?:number;
     sections?:ModuleSectionPageProps[]
     items?:[],
-    path?:string
+    pathName?:string
     count?:number
 }
 

@@ -3,7 +3,6 @@ import {
   ModuleSectionPageProps,
 } from "@/types/moduleSectionTyps";
 
-
 export const getModulesSection = async (
   filters: ModuleSectionFilterProps
 ): Promise<ModuleSectionPageProps[]> => {
@@ -16,7 +15,10 @@ export const getModulesSection = async (
   });
 
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/ModuleSection?${queryParams}`
+    `${process.env.NEXT_PUBLIC_API_URL}/ModuleSection?${queryParams}`,
+    {
+      cache: "no-store",
+    }
   );
 
   if (!response.ok) {
@@ -31,7 +33,12 @@ export const getModulesSection = async (
 export const getSectionById = async (
   id: string
 ): Promise<ModuleSectionPageProps> => {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/ModuleSection/${id}`);
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/ModuleSection/${id}`,
+    {
+      cache: "no-store",
+    }
+  );
 
   if (!response.ok) {
     const errorData = await response.json().catch(() => null);

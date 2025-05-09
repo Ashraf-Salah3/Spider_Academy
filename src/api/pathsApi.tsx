@@ -13,7 +13,8 @@ export const getPaths = async (
   });
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/EducationalPath?${queryParams}`
-  );
+    , {
+      cache: 'no-store'});
   if (!response.ok) {
     throw new Error("Failed to fetch paths");
   }
@@ -24,7 +25,8 @@ export const getPaths = async (
 
 // Fetch a specific path by ID using fetch instead of axios
 export const getPathById = async (id: string): Promise<PathsProps> => {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/EducationalPath/${id}`)
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/EducationalPath/${id}`, {
+    cache: 'no-store'})
 
   if (!response.ok) {
     throw new Error("Failed to fetch path by ID");

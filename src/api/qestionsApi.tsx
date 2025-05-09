@@ -14,7 +14,7 @@ export const fetchQuestions = async (
   ).toString();
 
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/Quiz?${query}`, {
-    next: { revalidate: 60 },
+    cache: 'no-store', // يمنع التخزين المؤقت نهائيًا
   });
 
   if (!res.ok) {
@@ -27,7 +27,8 @@ export const fetchQuestions = async (
 };
 
 export const fetchQuestionsById = async (id: string) => {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/Quiz/${id}`);
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/Quiz/${id}`, {
+    cache: 'no-store'} )
 
   const data = await response.json();
   return Array.isArray(data) ? data[0] : data;

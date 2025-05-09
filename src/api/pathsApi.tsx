@@ -12,7 +12,7 @@ export const getPaths = async (
     }
   });
   const response = await fetch(
-    `https://spideracademy.runasp.net/api/EducationalPath?${queryParams}`
+    `${process.env.NEXT_PUBLIC_API_URL}/EducationalPath?${queryParams}`
   );
   if (!response.ok) {
     throw new Error("Failed to fetch paths");
@@ -24,7 +24,7 @@ export const getPaths = async (
 
 // Fetch a specific path by ID using fetch instead of axios
 export const getPathById = async (id: string): Promise<PathsProps> => {
-  const response = await fetch(`https://spideracademy.runasp.net/api/EducationalPath/${id}`)
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/EducationalPath/${id}`)
 
   if (!response.ok) {
     throw new Error("Failed to fetch path by ID");

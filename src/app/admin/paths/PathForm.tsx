@@ -15,6 +15,7 @@ interface PathFormProps {
 }
 const PathForm = ({ isEdit, initialData, pathId }: PathFormProps) => {
   const [image, setImage] = useState<File | string | undefined>(undefined);
+  const [loading, setLoading] = useState(false);
 
   const {
     register,
@@ -45,6 +46,7 @@ const PathForm = ({ isEdit, initialData, pathId }: PathFormProps) => {
 
   const { mutate } = useMutation({
     mutationFn: async (data: PathsProps) => {
+      setLoading(true);
       const formData = new FormData();
       formData.append("Title", data.title ?? "");
       formData.append("NumOfModules", data.numOfModules?.toString() ?? "");
@@ -68,12 +70,13 @@ const PathForm = ({ isEdit, initialData, pathId }: PathFormProps) => {
 
     onSuccess: () => {
       toast.success(isEdit ? "Path Updated" : "Path Added");
-
+      setLoading(false);
       reset();
       setImage(undefined);
     },
     onError: () => {
       toast.error("Failed Please try again");
+      setLoading(false);
     },
   });
 
@@ -185,8 +188,9 @@ const PathForm = ({ isEdit, initialData, pathId }: PathFormProps) => {
         <button
           type="submit"
           className="!bg-[var(--accent)] rounded-2xl px-8 py-1.5 text-white text-xl"
+          disabled={loading}
         >
-          {isEdit ? "Save" : "Create Path"}
+          {loading ? "loading" : isEdit ? "Save" : "Create Path"}
         </button>
       </div>
     </form>

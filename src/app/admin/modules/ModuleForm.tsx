@@ -94,6 +94,7 @@ const ModuleForm = ({
     },
     onError: () => {
       toast.error("Failed to process Module");
+      
     },
   });
   const onSubmit = (data: ModulesPageProps) => {

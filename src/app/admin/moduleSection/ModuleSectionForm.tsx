@@ -22,7 +22,11 @@ const ModuleSectionForm = ({
   isEdit,
   modules,
 }: ModuleFormProps) => {
+
   const [image, setImage] = useState<File | string | undefined>(undefined);
+  const [loading, setLoading] = useState(false);
+
+
   const {
     register,
     handleSubmit,
@@ -51,6 +55,7 @@ const ModuleSectionForm = ({
 
   const { mutate } = useMutation({
     mutationFn: async (data: ModuleSectionPageProps) => {
+      setLoading(true)
       const formData = new FormData();
       formData.append("Title", data.title ?? "");
       formData.append("Body", data.body ?? "");
@@ -70,12 +75,13 @@ const ModuleSectionForm = ({
     },
     onSuccess: () => {
       toast.success(isEdit ? "Module Section Updated" : "Module Section Added");
-
+      setLoading(false)
       reset(initialData);
       setImage(undefined);
     },
     onError: () => {
       toast.error("faild please try again");
+      setLoading(false)
     },
   });
 
@@ -163,8 +169,9 @@ const ModuleSectionForm = ({
         <button
           type="submit"
           className="!bg-[var(--accent)] rounded-2xl px-8 py-1.5 text-white text-xl"
+          disabled={loading}
         >
-          {isEdit ? "Save" : "Create Module"}
+          {loading ? "Loading" : isEdit ? "Save" : "Create Module"}
         </button>
       </div>
     </form>

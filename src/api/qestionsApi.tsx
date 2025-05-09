@@ -13,7 +13,7 @@ export const fetchQuestions = async (
     filters as Record<string, string>
   ).toString();
 
-  const res = await fetch(`https://spideracademy.runasp.net/api/Quiz?${query}`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/Quiz?${query}`, {
     next: { revalidate: 60 },
   });
 
@@ -27,7 +27,7 @@ export const fetchQuestions = async (
 };
 
 export const fetchQuestionsById = async (id: string) => {
-  const response = await fetch(`https://spideracademy.runasp.net/api/Quiz/${id}`);
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/Quiz/${id}`);
 
   const data = await response.json();
   return Array.isArray(data) ? data[0] : data;

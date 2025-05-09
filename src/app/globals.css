@@ -136,6 +136,10 @@ button {
   cursor: pointer;
   font-family: var(--main-font);
 }
+button:disabled{
+  cursor: none;
+  background-color:gray;
+}
 button:disabled {
   display: none;
   cursor: none;

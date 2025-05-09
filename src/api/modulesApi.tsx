@@ -11,7 +11,7 @@ export const getModules = async (
     }
   });
 
-  const url = `https://spideracademy.runasp.net/api/Module?${queryParams.toString()}`;
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/Module?${queryParams.toString()}`;
   const response = await fetch(url);
 
   if (!response.ok) {
@@ -24,7 +24,7 @@ export const getModules = async (
 };
 
 export const getModuleById = async (id: string): Promise<ModulesPageProps> => {
-  const url = `https://spideracademy.runasp.net/api/Module/${id}`;
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/Module/${id}`;
   const response = await fetch(url);
 
   if (!response.ok) {

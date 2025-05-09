@@ -1,4 +1,3 @@
-import instance from "@/axios";
 import {
   ModuleSectionFilterProps,
   ModuleSectionPageProps,
@@ -8,33 +7,31 @@ import {
 export const getModulesSection = async (
   filters: ModuleSectionFilterProps
 ): Promise<ModuleSectionPageProps[]> => {
-  // const queryParams = new URLSearchParams();
+  const queryParams = new URLSearchParams();
 
-  // Object.entries(filters).forEach(([key, value]) => {
-  //   if (value !== undefined) {
-  //     queryParams.append(key, value.toString());
-  //   }
-  // });
+  Object.entries(filters).forEach(([key, value]) => {
+    if (value !== undefined) {
+      queryParams.append(key, value.toString());
+    }
+  });
 
-  // const response = await fetch(
-  //   `https://spideracademy.runasp.net/api/ModuleSection?${queryParams}`
-  // );
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/ModuleSection?${queryParams}`
+  );
 
-  // if (!response.ok) {
-  //   const errorData = await response.json().catch(() => null);
-  //   throw new Error(errorData?.errors?.[0] || "Failed to fetch Sections .");
-  // }
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => null);
+    throw new Error(errorData?.errors?.[0] || "Failed to fetch Sections .");
+  }
 
-  // const data = await response.json();
-
-  const response = await instance.get("ModuleSection" , {params:filters})
-  return response.data.data;
+  const data = await response.json();
+  return data.data;
 };
 
 export const getSectionById = async (
   id: string
 ): Promise<ModuleSectionPageProps> => {
-  const response = await fetch(`https://spideracademy.runasp.net/api/ModuleSection/${id}`);
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/ModuleSection/${id}`);
 
   if (!response.ok) {
     const errorData = await response.json().catch(() => null);

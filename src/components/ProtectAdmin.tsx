@@ -2,7 +2,7 @@
 
 import Loading from "@/app/loading";
 import { jwtDecode } from "jwt-decode";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import React, { ReactNode, useEffect, useState } from "react";
 
 type Props = {
@@ -16,10 +16,9 @@ interface CustomJwtPayload {
 
 const ProtectAdmin = ({ children }: Props) => {
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true); // true by default
 
   useEffect(() => {
-    setLoading(true);
     const token = localStorage.getItem("userId");
 
     if (!token) {
@@ -33,16 +32,17 @@ const ProtectAdmin = ({ children }: Props) => {
         decodedToken[
           "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
         ];
+
       if (role !== "Admin") {
-        redirect("/");
+        router.push("/");
+        return;
       }
 
-      setLoading(false);
-    } catch {
-      setLoading(false);
-     
+      setLoading(false); // valid admin
+    } catch  {
+      router.push("/"); // invalid token
     }
-  }, []);
+  }, [router]);
 
   if (loading) return <Loading />;
 

@@ -10,7 +10,6 @@ const AdminLayout = ({ children }: AdminProps) => {
     <ProtectAdmin>
     <div className="flex min-h-screen">
       {/* Sidebar */}
-   
         <div className="fixed left-0 top-0 h-screen w-1/6 bg-[#1E2753] ">
           <AdminSidebar />
         </div>
@@ -19,7 +18,6 @@ const AdminLayout = ({ children }: AdminProps) => {
         <div className="w-full lg:w-5/6 lg:ml-[18%] overflow-y-auto p-6">
           {children}
         </div>
-     
     </div>
     </ProtectAdmin>
   );

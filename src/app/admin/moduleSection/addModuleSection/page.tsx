@@ -4,7 +4,7 @@ import { getModules } from "@/api/modulesApi";
 
 const AddModuleSectionPage = async () => {
   const modules = await getModules({ PageIndex: 1, PageSize: 30 });
-  console.log(modules)
+
   return (
     <div className="w-3/4 m-auto mt-6 ">
       <div className="flex justify-center">

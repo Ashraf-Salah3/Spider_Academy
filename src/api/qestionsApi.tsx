@@ -14,7 +14,7 @@ export const fetchQuestions = async (
   ).toString();
 
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/Quiz?${query}`, {
-    cache: 'no-store', // يمنع التخزين المؤقت نهائيًا
+    cache: 'no-store', 
   });
 
   if (!res.ok) {

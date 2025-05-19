@@ -4,7 +4,7 @@ import { logo } from "@/assets";
 import clsx from "clsx";
 import Image from "next/image";
 import Link from "next/link";
-import { redirect, usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FiLogOut } from "react-icons/fi";
 import { IoMdClose } from "react-icons/io";
@@ -13,31 +13,32 @@ const Header = () => {
   const pathName = usePathname();
   const [showMenu, setShowMenu] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-
+  const router = useRouter();
   const toggleMenu = () => setShowMenu((prev) => !prev);
+  const [hasMounted, setHasMounted] = useState(false);
 
- useEffect(() => {
-    // Initial check
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
     const token = localStorage.getItem("userId");
     setIsAuthenticated(!!token);
 
-    // Listen to changes from other tabs or login/logout
     const handleStorageChange = () => {
       const newToken = localStorage.getItem("userId");
       setIsAuthenticated(!!newToken);
     };
 
     window.addEventListener("storage", handleStorageChange);
-
-    return () => {
-      window.removeEventListener("storage", handleStorageChange);
-    };
+    return () => window.removeEventListener("storage", handleStorageChange);
   }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("userId");
     setIsAuthenticated(false);
-    redirect("/login");
+    router.push("/login");
   };
 
   return (
@@ -91,18 +92,14 @@ const Header = () => {
           >
             <Link href="/modules">Modules</Link>
           </li>
-        
+
           <li className="block md:hidden text-white">
-          <button onClick={handleLogout}>
-           Logout
-          </button>
+            <button onClick={handleLogout}>Logout</button>
           </li>
-
         </ul>
-
       </nav>
       <div className="hidden md:block">
-        {isAuthenticated && (
+        {hasMounted && isAuthenticated && (
           <button onClick={handleLogout}>
             <FiLogOut color="white" size={20} />
           </button>

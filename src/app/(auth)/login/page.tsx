@@ -48,6 +48,7 @@ const Login = () => {
             ];
           if (userId) {
             localStorage.setItem("userId", userId);
+            window.dispatchEvent(new Event("storage"));
           }
           // document.cookie = `nameIdentifier=${userId}; path=/;`;
           router.push("/paths");

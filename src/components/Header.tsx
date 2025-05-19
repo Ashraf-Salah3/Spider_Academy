@@ -16,11 +16,22 @@ const Header = () => {
 
   const toggleMenu = () => setShowMenu((prev) => !prev);
 
-  useEffect(() => {
+ useEffect(() => {
+    // Initial check
     const token = localStorage.getItem("userId");
-    if (token) {
-      setIsAuthenticated(true);
-    }
+    setIsAuthenticated(!!token);
+
+    // Listen to changes from other tabs or login/logout
+    const handleStorageChange = () => {
+      const newToken = localStorage.getItem("userId");
+      setIsAuthenticated(!!newToken);
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
   }, []);
 
   const handleLogout = () => {

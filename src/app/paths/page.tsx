@@ -32,7 +32,7 @@ const PathsPage = async ({
   const count = paths?.count || 0;
 
   return (
-    <div className="container min-h-[80vh] my-8 mt-5 flex flex-col">
+    <div className="container min-h-screen my-8 mt-5 flex flex-col">
       <h2 className="text-center text-white w-fit border-b-3 border-[var(--accent)] mx-auto my-4 font-bold text-2xl mb-8">
         Paths
       </h2>
@@ -41,15 +41,15 @@ const PathsPage = async ({
         {paths?.items?.map((path, index) => (
           <div
             key={index}
-            className="box text-center border-[#ccc] border-2 rounded-lg text-white flex flex-col cursor-pointer overflow-hidden"
+            className="box text-center border-[#ccc] border-2 rounded-lg text-white flex flex-col cursor-pointer overflow-hidden "
           >
             <div className="custom-image-effect relative overflow-hidden ">
               {path?.attachment && (
                 <Image
-                  className="h-[300px] w-full object-cover "
+                  className="w-full object-cover h-[25rem]"
                   src={path.attachment}
                   alt={path.title || ""}
-                  height={300}
+                  height={500}
                   width={500}
                   priority
                 />
@@ -60,7 +60,7 @@ const PathsPage = async ({
               {path.title}
             </h2>
 
-            <p className="text-[#777] text-lg p-6 mt-5 break-all line-clamp-2">
+            <p className="text-[#777] text-lg p-6 my-8 mt-12 break-all line-clamp-2">
               {path.description}
             </p>
 
@@ -82,7 +82,7 @@ const PathsPage = async ({
         ))}
       </div>
   
-        <div className="!text-white mt-auto">
+        <div className="!text-white mt-auto ">
           <PaginationWithLinks
             page={curruntPage || 1}
             pageSize={pageSize}

@@ -27,7 +27,7 @@ const ModulesPage = async ({
   const count = modules?.count || 1;
 
   return (
-    <div className="container min-h-[80vh] my-8 mt-4">
+    <div className="container min-h-screen my-8 mt-5 flex flex-col">
       <h2 className="text-center text-white w-fit  border-b-3 border-[var(--accent)] mx-auto my-4 font-semibold text-2xl mb-8 ">
         Modules
       </h2>

@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import instance from "@/axios";
 import { LoginProps } from "@/types/auth";
 import Link from "next/link";
+import Cookies from "js-cookie";
 
 interface CustomJwtPayload extends JwtPayload {
   "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"?: string;
@@ -39,7 +40,7 @@ const Login = () => {
       if (response.data && response.data.token) {
         const token = response.data.token;
         localStorage.setItem("token", token);
-        document.cookie = `academyToken=${token}; path=/;`;
+        Cookies.set("token", token, { expires: 7 });
 
         const decodedToken = decodeToken(token);
         if (decodedToken) {

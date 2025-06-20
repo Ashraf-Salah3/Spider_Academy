@@ -9,35 +9,26 @@ import { useEffect, useState } from "react";
 import { FiLogOut } from "react-icons/fi";
 import { IoMdClose } from "react-icons/io";
 import { HiOutlineMenuAlt3 } from "react-icons/hi";
+import Cookies from "js-cookie";
+import { toast } from "sonner";
+
 const Header = () => {
   const pathName = usePathname();
   const [showMenu, setShowMenu] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const router = useRouter();
   const toggleMenu = () => setShowMenu((prev) => !prev);
-  const [hasMounted, setHasMounted] = useState(false);
 
   useEffect(() => {
-    setHasMounted(true);
-  }, []);
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-
-    const token = localStorage.getItem("token");
+    const token = Cookies.get("token");
     setIsAuthenticated(!!token);
-
-    const handleStorageChange = () => {
-      const newToken = localStorage.getItem("token");
-      setIsAuthenticated(!!newToken);
-    };
-
-    window.addEventListener("storage", handleStorageChange);
-    return () => window.removeEventListener("storage", handleStorageChange);
   }, []);
 
   const handleLogout = () => {
+    Cookies.remove("token");
     localStorage.removeItem("userId");
     localStorage.removeItem("token");
+    toast.success("Logged out successfully");
     setIsAuthenticated(false);
     router.push("/login");
   };
@@ -100,7 +91,7 @@ const Header = () => {
         </ul>
       </nav>
       <div className="hidden md:block">
-        {hasMounted && isAuthenticated && (
+        {isAuthenticated && (
           <button onClick={handleLogout}>
             <FiLogOut color="white" size={20} />
           </button>

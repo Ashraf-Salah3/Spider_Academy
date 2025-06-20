@@ -46,7 +46,7 @@ const PathsPage = async ({
             <div className="custom-image-effect relative overflow-hidden ">
               {path?.attachment && (
                 <Image
-                  className="w-full object-cover h-[25rem]"
+                  className="w-full object-cover h-[22rem]"
                   src={path.attachment}
                   alt={path.title || ""}
                   height={500}
@@ -60,7 +60,7 @@ const PathsPage = async ({
               {path.title}
             </h2>
 
-            <p className="text-[#777] text-lg p-6 my-8 mt-12 break-all line-clamp-2">
+            <p className="text-[#777] text-lg p-6 my-8 break-all line-clamp-2">
               {path.description}
             </p>
 

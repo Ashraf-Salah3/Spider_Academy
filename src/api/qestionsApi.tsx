@@ -4,7 +4,6 @@ import {
 } from "@/types/questionsType";
 import { toast } from "sonner";
 
-
 // Fetching function
 export const fetchQuestions = async (
   filters: QuestionsFiltersProps
@@ -14,7 +13,7 @@ export const fetchQuestions = async (
   ).toString();
 
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/Quiz?${query}`, {
-    cache: 'no-store', 
+    cache: "no-store",
   });
 
   if (!res.ok) {
@@ -27,10 +26,25 @@ export const fetchQuestions = async (
 };
 
 export const fetchQuestionsById = async (id: string) => {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/Quiz/${id}`, {
-    cache: 'no-store'} )
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/Quiz/${id}`,
+    {
+      cache: "no-store",
+    }
+  );
 
   const data = await response.json();
   return Array.isArray(data) ? data[0] : data;
+};
+
+export const fetchSingleQuestion = async (sectionId: string):Promise<QuestionsPageProps> => {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/Quiz/${sectionId}`,
+    {
+      cache: "no-store",
+    }
+  );
+  const data = await response.json();
+  return  data.data;
 };
 // Custom hook for fetching questions

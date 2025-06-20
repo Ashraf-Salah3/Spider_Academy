@@ -16,11 +16,11 @@ interface CustomJwtPayload {
 
 const ProtectAdmin = ({ children }: Props) => {
   const router = useRouter();
-  const [loading, setLoading] = useState(true); // true by default
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const token = localStorage.getItem("userId");
-
+   
+    const token = localStorage.getItem("token");
     if (!token) {
       router.push("/");
       return;
@@ -38,15 +38,15 @@ const ProtectAdmin = ({ children }: Props) => {
         return;
       }
 
-      setLoading(false); // valid admin
-    } catch  {
-      router.push("/"); // invalid token
+      setLoading(false);
+    } catch {
+      router.push("/");
     }
   }, [router]);
 
   if (loading) return <Loading />;
 
-  return <main>{children}</main>;
+  return <>{children}</>;
 };
 
 export default ProtectAdmin;

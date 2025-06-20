@@ -23,11 +23,11 @@ const Header = () => {
   useEffect(() => {
     if (typeof window === "undefined") return;
 
-    const token = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
     setIsAuthenticated(!!token);
 
     const handleStorageChange = () => {
-      const newToken = localStorage.getItem("userId");
+      const newToken = localStorage.getItem("token");
       setIsAuthenticated(!!newToken);
     };
 
@@ -37,6 +37,7 @@ const Header = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("userId");
+    localStorage.removeItem("token");
     setIsAuthenticated(false);
     router.push("/login");
   };

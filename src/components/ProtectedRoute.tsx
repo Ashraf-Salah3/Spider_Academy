@@ -1,5 +1,5 @@
 "use client";
-import { redirect, usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import React, { ReactNode, useEffect } from "react";
 
 type Props = {
@@ -8,9 +8,10 @@ type Props = {
 
 const ProtectedRoute = ({ children }: Props) => {
   const pathname = usePathname();
+  const router = useRouter();
 
   useEffect(() => {
-    const token = localStorage.getItem("userId");
+    const token = localStorage.getItem("token");
 
     if (
       !token &&
@@ -20,10 +21,9 @@ const ProtectedRoute = ({ children }: Props) => {
       pathname !== "/reset-password" &&
       pathname !== "/forget-password"
     ) {
-      redirect("/login");
+      router.push("/login");
     }
-  }, [pathname]);
-
+  }, [pathname, router]);
 
   return <>{children}</>;
 };

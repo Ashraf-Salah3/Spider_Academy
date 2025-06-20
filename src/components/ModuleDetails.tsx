@@ -22,15 +22,17 @@ const ModuleDetails = ({ module }: { module: ModulesPageProps }) => {
         {module.title?.toUpperCase()} MODULE
       </h2>
       <div className="rounded-xl bg-[var(--btn-color)] p-4 mb-4">
-        <div className="flex items-center gap-8 max-md:flex-col">
-          {module.attachment && (
-            <Image
-              src={module.attachment}
-              alt={module.title || "Image"}
-              width={300}
-              height={300}
-              className="rounded-xl !h-[15rem] !w-[28rem] object-cover"
-            />
+          <div className="flex flex-col md:flex-row  items-center gap-8 ">
+            {module?.attachment && (
+              <Image
+                src={module?.attachment}
+                alt={module?.title || "Image"}
+                width={400}
+                height={400}
+                priority
+                className="rounded-xl h-[19rem] w-[30rem] object-cover"
+  
+              />
           )}
           <p className="text-white break-words">{module.description}</p>
         </div>
@@ -38,7 +40,7 @@ const ModuleDetails = ({ module }: { module: ModulesPageProps }) => {
 
       <div className="flex gap-12 max-md:flex-col max-md:gap-4">
         <div className="w-full lg:w-3/4 my-8">
-          <h1 className="text-white m-auto font-bold mb-6 text-3xl tracking-widest border-b-3 w-fit pb-2 border-[var(--accent)]">
+          <h1 className="text-white m-auto font-bold mb-6 text-xl min-md:text-3xl tracking-widest border-b-3 w-fit pb-2 border-[var(--accent)]">
             {module?.sections?.[section]?.title}
           </h1>
           {module?.sections?.[section]?.attachment && (

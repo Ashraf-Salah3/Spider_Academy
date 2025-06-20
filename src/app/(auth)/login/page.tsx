@@ -38,6 +38,7 @@ const Login = () => {
 
       if (response.data && response.data.token) {
         const token = response.data.token;
+        localStorage.setItem("token", token);
         document.cookie = `academyToken=${token}; path=/;`;
 
         const decodedToken = decodeToken(token);
@@ -50,7 +51,12 @@ const Login = () => {
             localStorage.setItem("userId", userId);
             window.dispatchEvent(new Event("storage"));
           }
-          // document.cookie = `nameIdentifier=${userId}; path=/;`;
+          // await fetch("/api/set-cookie", {
+          //   method: "POST",
+          //   headers: { "Content-Type": "application/json" },
+          //   body: JSON.stringify({ userId }),
+          // });
+
           router.push("/paths");
           reset();
         }

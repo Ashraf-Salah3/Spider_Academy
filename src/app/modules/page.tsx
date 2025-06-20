@@ -27,8 +27,9 @@ const ModulesPage = async ({
   const count = modules?.count || 1;
 
   return (
-    <div className="container min-h-screen my-8 mt-5 flex flex-col">
-      <h2 className="text-center text-white w-fit  border-b-3 border-[var(--accent)] mx-auto my-4 font-semibold text-2xl mb-8 ">
+        <div className="container min-h-screen mt-4 mb-8 flex flex-col">
+
+      <h2 className="text-center text-white w-fit  border-b-3 border-[var(--accent)] mx-auto  font-semibold text-2xl mb-8 ">
         Modules
       </h2>
       <div className="grid gap-8 grid-cols-[repeat(auto-fill,minmax(300px,1fr))] !mb-8">

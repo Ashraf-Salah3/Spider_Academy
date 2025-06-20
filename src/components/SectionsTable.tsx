@@ -106,7 +106,7 @@ const SectionsTable = ({moduleSection}:{moduleSection: ModuleSectionPageProps[]}
                      <TableCell className="!text-white !text-center break-words ">
                        {module.title}
                      </TableCell>
-                     <TableCell className="!text-white !text-center break-words break-all ">
+                   <TableCell className="!text-white !text-center break-words break-all line-clamp-4 ">
                        {module.body}
                      </TableCell>
    

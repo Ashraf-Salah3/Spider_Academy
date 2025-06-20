@@ -32,8 +32,8 @@ const PathsPage = async ({
   const count = paths?.count || 0;
 
   return (
-    <div className="container min-h-screen my-8 mt-5 flex flex-col">
-      <h2 className="text-center text-white w-fit border-b-3 border-[var(--accent)] mx-auto my-4 font-bold text-2xl mb-8">
+    <div className="container min-h-screen mt-4 mb-8 flex flex-col">
+      <h2 className="text-center text-white w-fit border-b-3 border-[var(--accent)] mx-auto font-bold text-2xl mb-8">
         Paths
       </h2>
 
@@ -46,7 +46,7 @@ const PathsPage = async ({
             <div className="custom-image-effect relative overflow-hidden ">
               {path?.attachment && (
                 <Image
-                  className="w-full object-cover h-[22rem]"
+                  className="w-full object-cover h-[20rem]"
                   src={path.attachment}
                   alt={path.title || ""}
                   height={500}
@@ -56,11 +56,11 @@ const PathsPage = async ({
               )}
             </div>
 
-            <h2 className="text-3xl m-auto w-fit relative after:absolute after:w-[calc(100%-30px)] after:h-1 after:bottom-[-20px] after:left-4 after:bg-[var(--accent)]">
+            <h2 className="text-2xl m-auto w-fit relative after:absolute after:w-[calc(100%-30px)] after:h-1 after:bottom-[-20px] after:left-4 after:bg-[var(--accent)]">
               {path.title}
             </h2>
 
-            <p className="text-[#777] text-lg p-6 my-8 break-all line-clamp-2">
+            <p className="text-[#777] text-lg p-6 my-4 break-all line-clamp-2">
               {path.description}
             </p>
 

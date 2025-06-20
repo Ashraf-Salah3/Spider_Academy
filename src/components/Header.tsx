@@ -10,7 +10,7 @@ import { FiLogOut } from "react-icons/fi";
 import { IoMdClose } from "react-icons/io";
 import { HiOutlineMenuAlt3 } from "react-icons/hi";
 import Cookies from "js-cookie";
-import { toast } from "sonner";
+
 
 const Header = () => {
   const pathName = usePathname();
@@ -22,13 +22,12 @@ const Header = () => {
   useEffect(() => {
     const token = Cookies.get("token");
     setIsAuthenticated(!!token);
-  }, []);
-
+  }, [pathName]);
   const handleLogout = () => {
     Cookies.remove("token");
     localStorage.removeItem("userId");
     localStorage.removeItem("token");
-    toast.success("Logged out successfully");
+
     setIsAuthenticated(false);
     router.push("/login");
   };
